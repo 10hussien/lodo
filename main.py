@@ -1,12 +1,10 @@
+from player import Player
 from game import Game
 
-if __name__ == "__main__":
-    game = Game()
+# إنشاء اللاعبين
+player1 = Player("Player 1", "Red")
+player2 = Player("Player 2", "Blue")
 
-    # عرض الرقعة قبل بدء اللعبة
-    game.start()
-
-    # بدء اللعبة
-    while True:
-        if game.play_turn():
-            break
+# بدء اللعبة
+game = Game(player1, player2)
+game.play_game()
