@@ -1,5 +1,6 @@
 import random
 from board import Board
+
 class Game:
     def __init__(self, player1, player2):
         self.players = [player1, player2]
@@ -52,26 +53,29 @@ class Game:
 
         # Choose a piece to move
         while True:
-            piece_index = int(input("Choose a piece to move (enter the number): "))
-            if piece_index not in available_pieces:
-                print("Invalid choice. You cannot move this piece. Try again.")
-                continue
-            # Move the piece
-            if current_player.move_piece(piece_index, dice_roll):
-                new_position = current_player.pieces[piece_index]
-                print(f"{current_player.name} moved piece {piece_index} to position {new_position}.")
-                # Check if an opponent's piece is displaced
-                for player in self.players:
-                    if player != current_player:
-                        for i, pos in enumerate(player.pieces):
-                            if pos == new_position and self.should_return_piece(self.players, new_position):
-                                player.pieces[i] = -1  # Send the piece back to the base
-                                print(f"{current_player.name} displaced {player.name}'s piece!")
-                                if dice_roll != 6:
-                                    self.switch_player()  # Extra turn
-                break
-            else:
-                print("Invalid move. You cannot move this piece. Try again.")
+            try:
+                piece_index = int(input("Choose a piece to move (enter the number): "))
+                if piece_index not in available_pieces:
+                    print("Invalid choice. You cannot move this piece. Try again.")
+                    continue
+                # Move the piece
+                if current_player.move_piece(piece_index, dice_roll):
+                    new_position = current_player.pieces[piece_index]
+                    print(f"{current_player.name} moved piece {piece_index} to position {new_position}.")
+                    # Check if an opponent's piece is displaced
+                    for player in self.players:
+                        if player != current_player:
+                            for i, pos in enumerate(player.pieces):
+                                if pos == new_position and self.should_return_piece(self.players, new_position):
+                                    player.pieces[i] = -1  # Send the piece back to the base
+                                    print(f"{current_player.name} displaced {player.name}'s piece!")
+                                    if dice_roll != 6:
+                                        self.switch_player()  # Extra turn
+                    break
+                else:
+                    print("Invalid move. You cannot move this piece. Try again.")
+            except ValueError:
+                print("Invalid input. You must enter a number. Try again.")
 
         if dice_roll != 6:
             self.switch_player()
