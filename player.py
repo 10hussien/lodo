@@ -1,9 +1,10 @@
 class Player:
-    def __init__(self, name, color):
+    def __init__(self, name, color, start_position=0):
         self.name = name
         self.color = color
         self.pieces = [-1, -1, -1, -1]  # -1 يعني القطعة في القاعدة
         self.finished_pieces = 0  # عدد القطع التي وصلت للنهاية
+        self.start_position = start_position  # نقطة البداية الخاصة باللاعب
 
     def has_all_pieces_in_base(self):
         """تحقق إذا كانت كل القطع في القاعدة."""
@@ -18,7 +19,7 @@ class Player:
         if self.pieces[piece_index] == -1 and steps != 6:
             return False  # لا يمكن تحريك القطعة من القاعدة إلا برقم 6
         if self.pieces[piece_index] == -1:
-            self.pieces[piece_index] = 0  # نقل القطعة من القاعدة إلى نقطة البداية
+            self.pieces[piece_index] = self.start_position  # نقل القطعة من القاعدة إلى نقطة البداية الخاصة باللاعب
         else:
             self.pieces[piece_index] += steps
             if self.pieces[piece_index] > 56:  # إذا تجاوزت القطعة النهاية
