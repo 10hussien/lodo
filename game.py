@@ -12,42 +12,34 @@ class Game:
         self.last_board_state = None  # تتبع آخر حالة للوحة
 
     def roll_dice(self):
-        """رمي النرد باستخدام الدالة من rules.py."""
-        input("Press Enter to roll the dice...")
+        input("Press Enter to roll the dice :")
         return self.rules.roll_dice()
 
     def switch_player(self):
-        """تبديل الأدوار بين اللاعبين."""
         self.current_player_index = 1 - self.current_player_index
 
     def play_turn(self):
-        """لعب دور اللاعب الحالي."""
         current_player = self.players[self.current_player_index]
         print(f"\n{current_player.name}'s turn ({current_player.color})")
 
-        # رمي النرد وتخزين النتائج
         dice_results = []
         while True:
             dice_roll = self.roll_dice()
             print(f"Dice roll: {dice_roll}")
             dice_results.append(dice_roll)
-            if dice_roll != 6:
-                break  # التوقف إذا لم تكن النتيجة 6
+            if dice_roll != 6 :
+                break  
 
-        # عرض جميع نتائج النرد
         print(f"All dice results: {dice_results}")
 
-        # التحرك بناءً على كل نتيجة نرد
+        
         for dice_roll in dice_results:
             print(f"\nUsing dice result: {dice_roll}")
-
-            # الحصول على القطع المتاحة للتحريك
             available_pieces = current_player.get_available_pieces(dice_roll)
             if not available_pieces:
                 print(f"{current_player.name} cannot move any pieces with this dice roll.")
-                continue  # التخطي إذا لم تكن هناك قطع متاحة
+                continue 
 
-            # عرض القطع المتاحة للتحريك بشكل أكثر وضوحًا
             print("Available pieces to move:")
             for piece_index in available_pieces:
                 if current_player.pieces[piece_index] == -1:
@@ -58,9 +50,8 @@ class Game:
                         new_position = 56
                     print(f"{piece_index}: Piece at position {current_player.pieces[piece_index]}")
 
-            # اختيار قطعة للتحريك
             if isinstance(current_player, AIPlayer):
-                piece_index = current_player.choose_piece(dice_roll, self.board)  # تمرير اللوحة هنا
+                piece_index = current_player.choose_piece(dice_roll, self.board) 
             else:
                 while True:
                     try:
@@ -72,36 +63,30 @@ class Game:
                     except ValueError:
                         print("Invalid input. You must enter a number. Try again.")
 
-            # تحريك القطعة
             if current_player.move_piece(piece_index, dice_roll):
                 new_position = current_player.pieces[piece_index]
                 print(f"{current_player.name} moved piece {piece_index} to position {new_position}.")
 
-                # التحقق من إرسال قطعة اللاعب الآخر إلى القاعدة
                 self.rules.check_and_displace_piece(self.players, current_player, new_position)
             else:
                 print("Invalid move. You cannot move this piece. Try again.")
 
-        # تبديل اللاعب إذا لم تكن آخر نتيجة نرد 6
         if dice_results[-1] != 6:
             self.switch_player()
 
     def check_win(self):
-        """تحقق إذا فاز لاعب."""
         for player in self.players:
             if player.has_won():
                 return player
         return None
 
     def play_game(self):
-        """بدء اللعبة."""
         print("Starting Ludo Game!")
         self.board.print_board(self.players)
-        self.last_board_state = self.board.get_board_state(self.players)  # تهيئة آخر حالة للوحة
+        self.last_board_state = self.board.get_board_state(self.players)  
         winner = None
         while not winner:
             self.play_turn()
-            # التحقق من تغيير حالة اللوحة
             current_board_state = self.board.get_board_state(self.players)
             if current_board_state != self.last_board_state:
                 self.board.print_board(self.players)
