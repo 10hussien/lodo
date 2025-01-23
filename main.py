@@ -17,7 +17,7 @@ def main():
         mode = input("Do you want to play against the computer? (yes/no): ").strip().lower()
         
         if mode == "yes":
-            # depth = int(input("Enter the depth for the AI (e.g., 3): "))
+            
             verbose = input("Do you want to see AI decision details? (yes/no): ").strip().lower() == "yes"
             board = Board()  
             player1 = Player("Player 1", "Red")
@@ -36,8 +36,7 @@ def main():
         mode = input("Do you want to play against the computer? (yes/no): ").strip().lower()
         
         if mode == "yes":
-            # إذا كان اللعب ضد الكمبيوتر في الواجهة الرسومية
-            # depth = int(input("Enter the depth for the AI (e.g., 3): "))
+
             verbose = input("Do you want to see AI decision details? (yes/no): ").strip().lower() == "yes"
             board = Board()  
             player1 = Player("Player 1", "red")

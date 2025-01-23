@@ -14,7 +14,7 @@ class AIPlayer(Player):
         self.nodes_visited += 1
 
         if depth == 0 or self.has_won() or players[1 - current_player_index].has_won():
-            value = self.evaluate(board, players)
+            value = self.heuristic(board, players)
             if self.verbose:
                 print(f"Node: Depth={depth}, Value={value}, Player={players[current_player_index].name}, Dice={dice_roll}")
             return value
@@ -40,7 +40,7 @@ class AIPlayer(Player):
                 value += probability * child_value
             return value
 
-    def evaluate(self, board, players):
+    def heuristic(self, board, players):
         """تابع التقييم لحساب قيمة الوضع الحالي."""
         current_player = self
         opponent = players[1 - players.index(current_player)]
@@ -96,7 +96,8 @@ class AIPlayer(Player):
             original_position = self.pieces[piece_index]
             self.pieces[piece_index] = new_position
             value = self.expectiminimax(board, [self, self], 0, self.depth, False, dice_roll)
-            self.pieces[piece_index] = original_position  # التراجع عن الحركة
+            # التراجع عن الحركة
+            self.pieces[piece_index] = original_position 
 
             if value > best_value:
                 best_value = value
