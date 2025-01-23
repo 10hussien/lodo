@@ -1,17 +1,17 @@
 from player import Player
-from board import Board  # تأكد من استيراد Board
+from board import Board
 
 class AIPlayer(Player):
     def __init__(self, name, color, board, depth=3, verbose=False):
         super().__init__(name, color)
-        self.board = board  # إضافة اللوحة كجزء من الكائن
+        self.board = board
         self.depth = depth
         self.verbose = verbose
         self.nodes_visited = 0
 
     def expectiminimax(self, board, players, current_player_index, depth, is_maximizing_player, dice_roll):
         """خوارزمية Expectiminimax لاتخاذ القرار."""
-        self.nodes_visited += 1  # زيادة عدد العقد التي تم زيارتها
+        self.nodes_visited += 1
 
         if depth == 0 or self.has_won() or players[1 - current_player_index].has_won():
             value = self.evaluate(board, players)
@@ -85,7 +85,7 @@ class AIPlayer(Player):
 
     def choose_piece(self, dice_roll, board):
         """اختيار قطعة للتحريك باستخدام خوارزمية Expectiminimax."""
-        self.nodes_visited = 0  # إعادة تعيين عدد العقد التي تم زيارتها
+        self.nodes_visited = 0
         best_value = -float('inf')
         best_piece = None
 

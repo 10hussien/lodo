@@ -1,32 +1,24 @@
 import random
 from board import Board
 from ai_player import AIPlayer
+from lodo_rulse import Rules  # استيراد فئة Rules
 
 class Game:
     def __init__(self, player1, player2):
         self.players = [player1, player2]
         self.board = Board()
+        self.rules = Rules()  # إنشاء كائن من فئة Rules
         self.current_player_index = random.randint(0, 1)  # اختيار لاعب عشوائي لبدء اللعبة
         self.last_board_state = None  # تتبع آخر حالة للوحة
 
     def roll_dice(self):
-        """رمي النرد."""
+        """رمي النرد باستخدام الدالة من rules.py."""
         input("Press Enter to roll the dice...")
-        return random.randint(1, 6)
+        return self.rules.roll_dice()
 
     def switch_player(self):
         """تبديل الأدوار بين اللاعبين."""
         self.current_player_index = 1 - self.current_player_index
-
-    def should_return_piece(self, players, position):
-        """تحقق إذا كان يجب إعادة القطعة إلى القاعدة."""
-        if (self.board.is_safe_spot(position) or
-            position == 0 or
-            51 <= position <= 55):
-            return False
-        if self.board.is_wall(players, position):
-            return False
-        return True
 
     def play_turn(self):
         """لعب دور اللاعب الحالي."""
@@ -86,14 +78,7 @@ class Game:
                 print(f"{current_player.name} moved piece {piece_index} to position {new_position}.")
 
                 # التحقق من إرسال قطعة اللاعب الآخر إلى القاعدة
-                for player in self.players:
-                    if player != current_player:
-                        for i, pos in enumerate(player.pieces):
-                            if pos != -1 and abs(new_position - pos) == 26:  # الفرق بين المواقع يساوي 26
-                                if not self.board.is_safe_spot(pos):  # القطعة ليست في خانة آمنة
-                                    if not self.board.is_wall(self.players, pos):  # لا يوجد جدار في الموقع
-                                        player.pieces[i] = -1  # إرسال القطعة إلى القاعدة
-                                        print(f"{current_player.name} displaced {player.name}'s piece!")
+                self.rules.check_and_displace_piece(self.players, current_player, new_position)
             else:
                 print("Invalid move. You cannot move this piece. Try again.")
 
@@ -120,6 +105,6 @@ class Game:
             current_board_state = self.board.get_board_state(self.players)
             if current_board_state != self.last_board_state:
                 self.board.print_board(self.players)
-                self.last_board_state = current_board_state  # تحديث آخر حالة للوحة
+                self.last_board_state = current_board_state
             winner = self.check_win()
         print(f"{winner.name} ({winner.color}) has won the game!")

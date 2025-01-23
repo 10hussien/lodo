@@ -4,7 +4,6 @@ class Player:
         self.color = color
         self.pieces = [-1, -1, -1, -1]  # -1 يعني القطعة في القاعدة
         self.finished_pieces = 0  # عدد القطع التي وصلت للنهاية
-        self.path = list(range(57))  # مسار اللاعب (من 0 إلى 56)
 
     def has_all_pieces_in_base(self):
         """تحقق إذا كانت كل القطع في القاعدة."""

@@ -1,40 +1,31 @@
 from colorama import Fore, Back, Style, init
-
+from lodo_rulse import Rules  
 # تهيئة colorama
 init(autoreset=True)
 
 class Board:
     def __init__(self):
-        self.safe_spots = {0, 8, 13, 21, 26, 34, 39, 47}  # الخانات الآمنة
-        self.path_length = 56  # طول المسار من البداية إلى النهاية
+        self.rules = Rules()   # طول المسار من البداية إلى النهاية
 
     def is_safe_spot(self, position):
         """تحقق إذا كانت الخانة آمنة."""
-        return position in self.safe_spots
+        return self.rules.is_safe_spot(position)
 
     def is_wall(self, players, position):
         """تحقق إذا كان هناك جدار في الخانة (قطعتان أو أكثر من نفس اللاعب)."""
-        for player in players:
-            count = player.pieces.count(position)
-            if count >= 2:
-                return True
-        return False
+        return self.rules.is_wall(players, position)
+
+    def should_return_piece(self, players, position):
+        """تحقق إذا كان يجب إعادة القطعة إلى القاعدة."""
+        return self.rules.should_return_piece(players, position)
 
     def get_pieces_at_position(self, players, position):
         """احصل على القطع في موقع معين مع ألوانها."""
-        pieces = []
-        for player in players:
-            for i, pos in enumerate(player.pieces):
-                if pos == position:
-                    pieces.append((i, player.color))
-        return pieces
-
+        return self.rules.get_pieces_at_position(players, position)
+    
     def get_board_state(self, players):
         """احصل على حالة اللوحة الحالية (مواقع جميع قطع اللاعبين)."""
-        board_state = {}
-        for player in players:
-            board_state[player.name] = player.pieces.copy()
-        return board_state
+        return self.rules.get_board_state(players)
 
     def print_base_pieces(self, players):
         """طباعة القطع في القاعدة كمربعات ملونة."""
@@ -66,12 +57,12 @@ class Board:
         for player in players:
             print(f"\n{player.name}'s Board ({player.color}):")
             print("-" * 80)
-            for i in range(0, self.path_length + 1, 10):  # طباعة 10 خلايا في كل صف
-                for j in range(i, min(i + 10, self.path_length + 1)):
+            for i in range(0, self.rules.path_length + 1, 10):  # استخدام path_length من rules
+                for j in range(i, min(i + 10, self.rules.path_length + 1)):
                     # احصل على القطع في هذا الموقع
                     pieces = self.get_pieces_at_position(players, j)
                     # تحديد لون الخلية والمحتوى
-                    if j in self.safe_spots:
+                    if j in self.rules.safe_spots:  # استخدام safe_spots من rules
                         cell_color = Back.YELLOW + Fore.BLACK  # الخانات الآمنة
                     elif len(pieces) >= 2 and all(p[1] == pieces[0][1] for p in pieces):
                         # قطعتان أو أكثر من نفس اللاعب
@@ -85,7 +76,7 @@ class Board:
                     # إعداد محتوى الخلية
                     cell_content = f" {j:2} "
                     if pieces:
-                        if j in self.safe_spots:
+                        if j in self.rules.safe_spots:  # استخدام safe_spots من rules
                             # خانة آمنة: الحفاظ على لون الخلفية، تغيير لون النص
                             cell_content = f" {j:2} "
                             for p in pieces:
