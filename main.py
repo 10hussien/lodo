@@ -40,20 +40,20 @@ def main():
             depth = int(input("Enter the depth for the AI (e.g., 3): "))
             verbose = input("Do you want to see AI decision details? (yes/no): ").strip().lower() == "yes"
             board = Board()  
-            player1 = Player("Player 1", "Red")
-            player2 = AIPlayer("AI Player", "Blue", board, depth, verbose)
+            player1 = Player("Player 1", "red")
+            player2 = AIPlayer("AI Player", "blue", board, depth, verbose)
         else:
             # إذا كان اللعب ضد لاعب آخر في الواجهة الرسومية
-            player1 = Player("Player 1", "Red")
-            player2 = Player("Player 2", "Blue")
+            player1 = Player("Player 1", "red")
+            player2 = Player("Player 2", "blue")
 
         # بدء الواجهة الرسومية
         root = tk.Tk()
-        gui_game = LudoGame(root)  # بدء اللعبة مع الواجهة الرسومية
+        gui_game = LudoGame(root, player1, player2)  # بدء اللعبة مع الواجهة الرسومية
         root.mainloop()
     
     else:
-        print("Invalid choice. Please choose 1 for Terminal or 2 for GUI.")
+        print("Invalid choice. Please choose 1 for Terminal or 2 for GUI.") 
 
 if __name__ == "__main__":
     main()
