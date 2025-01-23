@@ -17,11 +17,11 @@ def main():
         mode = input("Do you want to play against the computer? (yes/no): ").strip().lower()
         
         if mode == "yes":
-            depth = int(input("Enter the depth for the AI (e.g., 3): "))
+            # depth = int(input("Enter the depth for the AI (e.g., 3): "))
             verbose = input("Do you want to see AI decision details? (yes/no): ").strip().lower() == "yes"
             board = Board()  
             player1 = Player("Player 1", "Red")
-            player2 = AIPlayer("AI Player", "Blue", board, depth, verbose)
+            player2 = AIPlayer("AI Player", "Blue", board, 4, verbose)
         else:
             player1 = Player("Player 1", "Red")
             player2 = Player("Player 2", "Blue")
@@ -37,11 +37,11 @@ def main():
         
         if mode == "yes":
             # إذا كان اللعب ضد الكمبيوتر في الواجهة الرسومية
-            depth = int(input("Enter the depth for the AI (e.g., 3): "))
+            # depth = int(input("Enter the depth for the AI (e.g., 3): "))
             verbose = input("Do you want to see AI decision details? (yes/no): ").strip().lower() == "yes"
             board = Board()  
             player1 = Player("Player 1", "red")
-            player2 = AIPlayer("AI Player", "blue", board, depth, verbose)
+            player2 = AIPlayer("AI Player", "blue", board, 4, verbose)
         else:
             # إذا كان اللعب ضد لاعب آخر في الواجهة الرسومية
             player1 = Player("Player 1", "red")
